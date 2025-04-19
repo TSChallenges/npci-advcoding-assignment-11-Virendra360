@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 // Service class for analyzing agricultural data
-// TODO: Implement this service class according to the requirements.
 
 @Service
 public class AgDataService {
@@ -30,22 +29,24 @@ public class AgDataService {
         return objectMapper.readValue(inputStream, new TypeReference<List<AgData>>() {});
     }
 
+    //  Count how many times a specific crop appears in the dataset
     public Long getCropCount(String cropName) {
-        // TODO: Implement this method to Count how many times a specific crop appears in the dataset
+        return agDataList.stream().filter(data -> data.getCrop().equalsIgnoreCase(cropName)).count();
 
-        return 0L;
     }
 
     public double getAverageYield(String cropName) {
-        // TODO: Implement this method to Calculate the average yield for a specific crop if it exists, else return 0.0
-
-        return 0.0;
+        return agDataList.stream()
+                .filter(data -> data.getCrop().equalsIgnoreCase(cropName))
+                .mapToDouble(AgData::getYield)
+                .average()
+                .orElse(0.0);
     }
 
+    //  Get all records from a specific region
     public List<AgData> getRecordsByRegion(String region) {
-        // TODO: Implement this method to Get all records from a specific region
-
-        return null;
+        List<AgData> list=agDataList.stream().filter(r->r.getRegion().equalsIgnoreCase(region)).collect(Collectors.toList());
+        return list;
     }
 
 }
